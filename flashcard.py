@@ -4,10 +4,10 @@ class Flashcard:
         self.question = question
 
     def get_question(self):
-        return self.question
+        return f"{self.question}"
 
     def get_answer(self):
-        return self.answer
+        return f"{self.answer}"
 
     def __str__(self):
         return f"{self.question} - {self.answer}"
