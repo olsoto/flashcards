@@ -1,5 +1,6 @@
 from flashcard import Flashcard
 import time
+import random
 
 def main():
     score = 0
@@ -11,19 +12,27 @@ def main():
         Flashcard("7 + 1", "8")
     ]
 
-    for card in cards:
-        print(card.get_question())
-        input("Press ENTER to show answer ")
-        print(card.get_answer())
-        answer = input("Did you get it right? (y/n) ")
-        if (answer == 'y'):
-            score += 1
-        time.sleep(1)
+    while True: 
+        random.shuffle(cards)
+        for card in cards:
+            print(card.get_question())
+            input("Press ENTER to show answer ")
+            print(card.get_answer())
+            answer = input("Did you get it right? (y/n) ")
+            if (answer == 'y'):
+                score += 1
+            time.sleep(1)
+            print()
+
+        replay = input("Do you wish to study again? (y/n) ")
         print()
+        if replay == 'n':
+            print("Session ended.")
+            print(f"Your final score was {score}!")
+            return
+        else:
+            print(f"New session. Your current score is {score}!")
 
-    print(f"Your final score was {score}!")
-
-    return 0
 
 if __name__ == "__main__":
     main()
