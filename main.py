@@ -4,13 +4,25 @@ import random
 
 def main():
     score = 0
+    cards = []
 
-    cards = [
-        Flashcard("2 + 2", "4"),
-        Flashcard("1 + 2", "3"),
-        Flashcard("3 + 4", "7"),
-        Flashcard("7 + 1", "8")
-    ]
+    version = input("Type 'f' to use input file for flashcards, or 'm' to manually enter flashcards ")
+    while (version != "f" and version != "m"):
+        print("That is not a valid input!")
+        version = input("Type 'f' to use input file for flashcards, or 'm' to manually enter flashcards ")
+
+    while version == "f":
+        filename = input("Enter the name of the file to be scanned: ")
+        try:
+            with open(filename, "r") as file:
+                lines = file.readlines()
+                for line in lines:
+                    card = line.split(",")
+                    cards.append(Flashcard(card[0], card[1]))
+                break
+        except FileNotFoundError:
+            print("Invalid file name!")
+
 
     while True: 
         random.shuffle(cards)
