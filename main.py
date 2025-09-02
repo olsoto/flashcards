@@ -10,7 +10,7 @@ def main():
     while (version != "f" and version != "m"):
         print("That is not a valid input!")
         version = input("Type 'f' to use input file for flashcards, or 'm' to manually enter flashcards ")
-
+    
     while version == "f":
         filename = input("Enter the name of the file to be scanned: ")
         try:
@@ -22,10 +22,28 @@ def main():
                 break
         except FileNotFoundError:
             print("Invalid file name!")
+    
+    while version == "m":
+        print("Enter a flashcard in format: '(question), (answer)' OR enter 'q' once completed.")
+        line = input().strip()
+        if not line:
+            continue
+        if line.lower() == "q":
+            break
+        if "," not in line:
+            print("Missing comma. Please use '(question), (answer)'.")
+            continue
+        q, a = [s.strip() for s in line.split(",", 1)]
+        if not q or not a:
+            print("Both question and answer must be non-empty.")
+            continue
+        cards.append(Flashcard(q,a))
 
 
     while True: 
         random.shuffle(cards)
+        print()
+        print("Shuffling cards and starting session.")
         for card in cards:
             print(card.get_question())
             input("Press ENTER to show answer ")
