@@ -6,10 +6,10 @@ def main():
     score = 0
     cards = []
 
-    version = input("Type 'f' to use input file for flashcards, or 'm' to manually enter flashcards ")
+    version = input("Type 'f' to use input file for flashcards, or 'm' to manually enter flashcards \n")
     while (version != "f" and version != "m"):
         print("That is not a valid input!")
-        version = input("Type 'f' to use input file for flashcards, or 'm' to manually enter flashcards ")
+        version = input("Type 'f' to use input file for flashcards, or 'm' to manually enter flashcards \n")
     
     while version == "f":
         filename = input("Enter the name of the file to be scanned: ")
@@ -17,8 +17,9 @@ def main():
             with open(filename, "r") as file:
                 lines = file.readlines()
                 for line in lines:
-                    card = line.split(",")
-                    cards.append(Flashcard(card[0], card[1]))
+                    q, a = [s.strip() for s in line.split(",", 1)]
+                    cards.append(Flashcard(q, a))
+                print("File successfully scanned. Launching session. \n")
                 break
         except FileNotFoundError:
             print("Invalid file name!")
@@ -40,10 +41,11 @@ def main():
         cards.append(Flashcard(q,a))
 
 
-    while True: 
+    while True:
+        missed_cards = [] 
         random.shuffle(cards)
         print()
-        print("Shuffling cards and starting session.")
+        print("Shuffling cards and starting session...")
         for card in cards:
             print(card.get_question())
             input("Press ENTER to show answer ")
@@ -51,17 +53,30 @@ def main():
             answer = input("Did you get it right? (y/n) ")
             if (answer == 'y'):
                 score += 1
+            elif (answer == 'n'):
+                missed_cards.append(card)
             time.sleep(1)
             print()
+        
 
-        replay = input("Do you wish to study again? (y/n) ")
-        print()
-        if replay == 'n':
-            print("Session ended.")
-            print(f"Your final score was {score}!")
-            return
+        if len(missed_cards) > 0:
+            replay = input("Do you want to study your missed cards? (y/n) ")
+            print()
+            if replay == 'n':
+                print("Session ended.")
+                print(f"Your final score was {score}!")
+            else:
+                print(f"Reviewing missed cards...")
+                cards = missed_cards
+                continue
+        
+        replay = input("Do you want to start a new session? (y/n) ")
+        if replay == "y":
+            print()
+            main()
         else:
-            print(f"New session. Your current score is {score}!")
+            print("Game over! ")
+            break
 
 
 if __name__ == "__main__":
